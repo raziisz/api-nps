@@ -5,7 +5,7 @@ import { getCustomRepository } from "typeorm";
 import { SurveysRepository } from "../repositories/SurveysRepository";
 import { SurveysUsersRepository } from "../repositories/SurveysUsersRepository";
 import { UsersRepository } from "../repositories/UsersRepository";
-import SendMainService from "../services/SendMainService";
+import SendMailService from "../services/SendMailService";
 
 
 class SendMailController {
@@ -46,7 +46,7 @@ class SendMailController {
         }
         
         if (surveyUserAlreadyExists) {
-            await SendMainService.execute(email, survey.title, variables, npsPath)
+            await SendMailService.execute(email, survey.title, variables, npsPath)
             return response.json(surveyUserAlreadyExists)
         }
         const surveyUser = surveysUsersRepository.create({
@@ -57,7 +57,7 @@ class SendMailController {
         await surveysUsersRepository.save(surveyUser);
         //Enviar e-mail para o Usuario
 
-        await SendMainService.execute(email, survey.title, variables, npsPath);
+        await SendMailService.execute(email, survey.title, variables, npsPath);
         return response.json(surveyUser)
     }
 }
